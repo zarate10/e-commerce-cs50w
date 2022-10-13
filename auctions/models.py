@@ -35,3 +35,5 @@ class Products(models.Model):
 class Comments(models.Model): 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.CharField(max_length=200)
+    product = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)

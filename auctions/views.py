@@ -104,7 +104,7 @@ def product_view(request, name):
                 return render(request, 'product_view.html', {
                     "name": name_view, 
                     "product": product, 
-                    "message": "La oferta no puede ser menor o igual a la última oferta."
+                    "message": "Bid must be higher than the last bid."
                 }) 
             
             product.update(last_offer=request.POST['last_offer'], last_bidder=request.POST['last_bidder'])
@@ -116,7 +116,7 @@ def product_view(request, name):
                 return render(request, 'product_view.html', {
                     "name": name_view, 
                     "product": product, 
-                    "message": "La oferta no puede ser menor o igual a la oferta inicial."
+                    "message": "The offer must be higher than the initial offer."
                 }) 
             
             product.update(last_offer=request.POST['last_offer'], last_bidder=request.POST['last_bidder'])
