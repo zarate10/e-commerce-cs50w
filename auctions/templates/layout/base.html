@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} — E-commerce</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}" class="title">Auctions</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="" class="user">Hi, {{ user }}</a></li>
+                {% endif %}
+            </ul>
+            <ul>
+                <li><a href="{% url 'index' %}">Products</a></li>
+                <li><a href="">Categories</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="">Create</a></li>
+                    <li><a href="">Watchlist</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    {% block body %}
+    {% endblock %}
+</body>
+</html>

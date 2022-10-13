@@ -1,0 +1,27 @@
+{% extends 'layout/base.html' %}
+{% block body %}
+
+    <div class="wrapper-catalog">
+
+        {% for item in products %}
+
+            <a href="/product/{{item.title}}" class="box-product">
+                <div class="img-box">
+                    <img src="{{ item.img_url }}" alt="">
+                </div>   
+                <div class="data-box">
+                    <div class="title">
+                        <p>{{ item.title }}</p>
+                        <p>${{ item.initial_offer }}</p>
+                    </div>
+                    <div class="description">
+                        <p>Created by {{ item.owner }}</p>
+                        {{item.created_at}}
+                    </div>
+                </div>
+            </a>
+
+        {% endfor %}
+
+    </div>
+{% endblock %}

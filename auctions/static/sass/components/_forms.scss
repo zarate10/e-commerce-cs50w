@@ -1,0 +1,61 @@
+@import './colors';
+
+form { 
+    width: 350px;
+    margin: 0 auto;
+    background: black;
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    label { 
+        display: block;
+        color: white;
+        text-transform: uppercase;
+        font-size: 0.8em;
+    }
+    span { 
+        color: $gray2;
+        font-size: 0.65em;
+        ul {
+            color: wheat;
+        }
+    }
+    p { 
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    input { 
+        width: 100%;
+        background: transparent;
+        border: 1px solid $gray;
+        padding: 10px;
+        color: white;
+    }
+    ul {
+        display: none;
+        li {
+            color: white;
+        }
+    }
+    h1 { 
+        color: white;
+        font-size: 1.8em;
+        font-weight: 400;
+    }
+    h5 {
+        color: black;
+        width: 100%;
+        background: white;
+    }
+    button { 
+       
+        border: none;
+        padding: 10px;
+        color: black;
+        cursor: pointer;
+        text-transform: uppercase;
+     
+    }
+}

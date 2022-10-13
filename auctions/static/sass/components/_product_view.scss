@@ -1,0 +1,95 @@
+@import './colors';
+.wrapper-product-view { 
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -10;
+    .left {
+        padding-top: 100px;
+        width: 45vw;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img { 
+            width: 65%;
+        }
+    }
+    .right {
+        padding-top: 100px;
+        padding-left: 4rem;
+        padding-right: 4rem;
+        width: 55vw;
+        height: 100%;
+        background: rgb(222, 226, 235);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        h5 {
+            text-transform: uppercase;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        h1 {
+            font-size: 1.6em;
+        }
+        p {
+            max-width: 55ch;
+            font-size: 0.9em;
+        }
+        .offers {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            .box-offer {
+                min-width: 200px;
+                margin-top: 10px;
+                padding: 10px;
+                background: rgb(252, 252, 252);
+                border-radius: 10px;
+                .initial {
+                    font-size: 0.9em;
+                    text-transform: uppercase;
+                    color: $gray2;
+    
+                }
+                .current { 
+                    font-size: 0.9em;
+                    color: $gray2;
+                    text-transform: uppercase;
+                    font-weight: 500;
+                }
+            }
+        }
+        form {
+
+            padding: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            background: none;
+            margin-top: 30px;
+            input { 
+                width: 50%;
+                background: rgb(252, 252, 252);
+                border: none;
+                padding: 15px;
+                border-radius: 10px;
+                color: black;
+            }
+            button { 
+                width: 30%;
+                background: black;
+                color: white;
+                border-radius: 10px;
+            }
+        }
+    }
+
+}
