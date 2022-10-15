@@ -1,0 +1,8 @@
+.advertisement {
+    display: none;
+}
+@media (max-width: 900px){
+    .advertisement { 
+        display: flex;
+    }
+}

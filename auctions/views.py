@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 
 from .forms import UserCreationForm
-from .models import Products
+from .models import Products, Comments
 
 # Create your views here.
 
@@ -92,7 +92,9 @@ def product_view(request, name):
     name_view = name
     product = Products.objects.filter(title=name)
     product_obj = product.values()[0]
+    comments = list(Comments.objects.filter(product=product_obj['id']).values())
 
+    print(comments)
     if request.method == 'POST':
         
         oferta_inicial = int(product_obj['initial_offer']) 
@@ -108,7 +110,7 @@ def product_view(request, name):
                 }) 
             
             product.update(last_offer=request.POST['last_offer'], last_bidder=request.POST['last_bidder'])
-            return redirect('/product/%s' % product_obj['title'])
+            return redirect(f'/product/{name}')
 
         else: # acá no hay última oferta
   
@@ -120,11 +122,42 @@ def product_view(request, name):
                 }) 
             
             product.update(last_offer=request.POST['last_offer'], last_bidder=request.POST['last_bidder'])
-            return redirect('/product/%s' % product_obj['title'])
+            return redirect(f'/product/{name}')
         
         # print(request.POST['last_offer'])
 
+    if comments: 
+
+        return render(request, 'product_view.html', {
+            "name": name_view, 
+            "product": product, 
+            "comments": comments, 
+        }) 
+    
     return render(request, 'product_view.html', {
         "name": name_view, 
         "product": product, 
     }) 
+    
+
+
+def comments_view(request, name): 
+
+    product = Products.objects.filter(title=name)
+    product_obj = product.values()[0]
+
+    if request.method == 'POST': 
+
+        comentario = request.POST['comment']
+
+        if len(comentario) > 0: 
+
+            Comments.objects.create(
+                comment=comentario,
+                product=product_obj['id'], 
+                user=request.user
+                )
+
+            return redirect(f'/product/{name}')
+
+    return redirect(f'/product/{name}')

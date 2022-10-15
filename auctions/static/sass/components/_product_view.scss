@@ -121,10 +121,12 @@
             margin: 0 auto;
             width: 100%;
             padding: 0 4rem;
+            color: black;
             input { 
                 width: 100%;
                 padding: 15px;
                 border-radius: 10px;
+                color: black;
             }
             button { 
                 background: black;
@@ -132,6 +134,28 @@
                 min-width: 150px;
                 color: white;
                 border-radius: 10px;
+            }
+        }
+    }
+
+    .body-comment { 
+        padding: 0 4rem;
+        margin-top: 15px;
+        .box { 
+            padding: 20px;
+            background: rgb(222, 226, 235);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            .name {
+                text-transform: uppercase;
+                font-size: 0.8em;
+                letter-spacing: 1px;
+                color: gray;
+                margin-bottom: 10px;
+            
+            }
+            .comment {
+                text-transform: capitalize;
             }
         }
     }

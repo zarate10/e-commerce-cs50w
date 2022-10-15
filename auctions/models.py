@@ -33,7 +33,7 @@ class Products(models.Model):
         return self.owner.username + ' - ' + self.title
     
 class Comments(models.Model): 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.CharField(max_length=150)
     comment = models.CharField(max_length=200)
     product = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)

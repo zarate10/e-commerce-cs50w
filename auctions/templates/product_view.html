@@ -24,7 +24,7 @@
                     </div>
                     {% if user.is_authenticated and user != item.owner %}
                         <div class="bid">
-                            <form action="" method="POST">
+                            <form action="/product/{{ name }}" method="POST">
                                 {% csrf_token %}
                                 {% if item.last_offer != None %}
                                     <input name="last_offer" type="number" min="{{ item.last_offer }}" max="99999999999" placeholder="$" required>
@@ -46,13 +46,24 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="wrapper-comments">
-            <div class="header-comment">
-                <form action="" method="POST">
-                    <input type="text" placeholder="Add comment">
-                    <button type="submit">ADD</button>
-                </form>
+            <div class="wrapper-comments">
+                {% if user.is_authenticated %}
+                    <div class="header-comment" id="comments">
+                        <form action="/product/{{ name }}/" method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="comment" placeholder="Add comment">
+                            <button type="submit">ADD</button>
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="body-comment">
+                    {% for c in comments %}
+                        <div class="box">
+                            <div class="name">{{ c.user }} - {{ c.created_at }}</div>
+                            <p class="comment"> {{ c.comment }} </p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
     </div>
 {% endblock %}
