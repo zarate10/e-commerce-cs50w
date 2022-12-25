@@ -9,6 +9,20 @@
                 <div class="right">
                     <h5>{{ item.category }}</h5>
                     <h1>{{ item.title }}</h1>
+                    {% if user.is_authenticated and user != item.owner%}
+                
+                        <form action="/product/{{ name }}/watchlist" method="POST" style="margin: 0;">
+                            {% csrf_token %}
+                            <input type="text" name="user" value="{{ user.id }}" hidden>
+                            <input type="text" name="item" value="{{ item.id }}" hidden>
+                            {% if not watchlist %}
+                            <button type="submit" style="padding: 5px; background: black; font-size: 10px; color: white; text-transform: uppercase; margin-top: -5px; width: 110px; text-align: center; border-radius: 5px; cursor: pointer;">add watchlist</button> 
+                            {% else %}
+                            <button type="submit" style="padding: 5px; background: black; font-size: 10px; color: white; text-transform: uppercase; margin-top: -5px; width: 130px; text-align: center; border-radius: 5px; cursor: pointer;">remove watchlist</button> 
+                            {% endif %}
+                        </form>
+                    
+                    {% endif %}
                     <p>{{ item.description }}</p>
                     <div class="offers">
                         <div class="box-offer">
@@ -22,7 +36,8 @@
                             </div>
                         {% endif %}
                     </div>
-                    {% if user.is_authenticated and user != item.owner %}
+                    {% if user.is_authenticated %}
+                        {% if user != item.owner %}
                         <div class="bid">
                             <form action="/product/{{ name }}" method="POST">
                                 {% csrf_token %}
@@ -35,6 +50,13 @@
                                 <button type="submit">PLACE BID</button>
                             </form>
                         </div>
+                        {% else %}
+                        <div class="bid">
+                            <form action="/" method="POST">
+                                <button type="submit">CLOSE AUCTION</button>
+                            </form>
+                        </div>
+                        {% endif %}
                     {% endif %}
                     {% if message %}
                         <div class="container-msg">

@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 
 from .forms import UserCreationForm
-from .models import Products, Comments
+from .models import Products, Comments, WatchList
 
 # Create your views here.
 
@@ -26,7 +26,6 @@ def login_view(request):
     name_view = 'Login'
 
     if request.method != 'POST': 
-
         return render(request, 'login.html', {
             "form": AuthenticationForm, 
             "name": name_view
@@ -93,10 +92,9 @@ def product_view(request, name):
     product = Products.objects.filter(title=name)
     product_obj = product.values()[0]
     comments = list(Comments.objects.filter(product=product_obj['id']).values())
+    user_watchlist = list(WatchList.objects.filter(user=request.user.id, product=list(product.values())[0]['id']).values())
 
-    print(comments)
     if request.method == 'POST':
-        
         oferta_inicial = int(product_obj['initial_offer']) 
         ultima_oferta = int(request.POST['last_offer']) 
 
@@ -104,7 +102,8 @@ def product_view(request, name):
 
             if int(product_obj['last_offer']) > ultima_oferta - 1: 
                 return render(request, 'product_view.html', {
-                    "name": name_view, 
+                    "name": name_view,
+                    "watchlist": user_watchlist, 
                     "product": product, 
                     "message": "Bid must be higher than the last bid."
                 }) 
@@ -116,26 +115,27 @@ def product_view(request, name):
   
             if oferta_inicial > ultima_oferta - 1: 
                 return render(request, 'product_view.html', {
-                    "name": name_view, 
+                    "name": name_view,
+                    "watchlist": user_watchlist, 
                     "product": product, 
                     "message": "The offer must be higher than the initial offer."
                 }) 
             
             product.update(last_offer=request.POST['last_offer'], last_bidder=request.POST['last_bidder'])
             return redirect(f'/product/{name}')
-        
-        # print(request.POST['last_offer'])
 
     if comments: 
 
         return render(request, 'product_view.html', {
-            "name": name_view, 
+            "name": name_view,
+            "watchlist": user_watchlist, 
             "product": product, 
             "comments": comments, 
         }) 
     
     return render(request, 'product_view.html', {
-        "name": name_view, 
+        "name": name_view,
+        "watchlist": user_watchlist, 
         "product": product, 
     }) 
     
@@ -159,5 +159,23 @@ def comments_view(request, name):
                 )
 
             return redirect(f'/product/{name}')
+
+    return redirect(f'/product/{name}')
+
+def add_watchlist(request, name): 
+
+    if request.method == 'POST': 
+        user = request.POST['user']
+        id_item = request.POST['item']
+
+        data_in_database = WatchList.objects.filter(user=user, product=id_item)
+
+        if not data_in_database: 
+            WatchList.objects.create(
+                user=user, 
+                product=id_item
+            )
+        else: 
+            data_in_database.delete()
 
     return redirect(f'/product/{name}')

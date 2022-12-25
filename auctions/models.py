@@ -43,5 +43,9 @@ class Comments(models.Model):
         return self.user + ' - ' + self.comment
 
 # model for watchlist
+class WatchList(models.Model): 
+    user = models.CharField(max_length=150)
+    product = models.PositiveIntegerField()
 
+    
 # model for store the winners 
