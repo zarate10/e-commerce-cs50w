@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User 
 
-
-# Create your models here.
+# model for dynamic categories 
 class Categories(models.Model): 
     title = models.TextField()
     def __str__(self):
@@ -17,6 +16,8 @@ dynamic_categories = Categories.objects.values()
 for category in dynamic_categories: 
     CATEGORIES_PRODUCTS.append((category['title'], category['title']))
 
+
+# model for products and bids
 class Products(models.Model): 
     title = models.CharField(max_length=300)
     description = models.TextField(blank=True)
@@ -31,9 +32,16 @@ class Products(models.Model):
 
     def __str__(self):
         return self.owner.username + ' - ' + self.title
-    
+
+# model for comments
 class Comments(models.Model): 
     user = models.CharField(max_length=150)
     comment = models.CharField(max_length=200)
     product = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.user + ' - ' + self.comment
+
+# model for watchlist
+
+# model for store the winners 
