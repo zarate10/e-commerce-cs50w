@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import UserCreationForm
+from .forms import UserCreationForm, CreateNewProduct
 from .models import Products, Comments, WatchList, Categories
 
 # Create your views here.
@@ -180,6 +180,7 @@ def view_watchlist(request):
     products = [Products.objects.get(id=element) for element in user_watchlist]
 
     return render(request, 'watchlist.html', { 
+        "name": "Watchlist",
         "products": products
     })
 
@@ -215,3 +216,30 @@ def view_categories(request):
     }
 
     return render(request, 'categories.html', contexto)
+
+def filter_category(request, name): 
+
+    products = Products.objects.filter(category=name, available=True)
+    return render(request, "index.html", {
+        "name": name, 
+        "products": products, 
+        "products_on_category": list(products)
+    })
+
+def view_create_offer(request): 
+
+    if request.method == 'POST': 
+
+        Products.objects.create(
+            title = request.POST['title'],
+            description = request.POST['description'],
+            initial_offer = request.POST['initial_offer'],
+            img_url = request.POST['img_url'],
+            category = request.POST['category'],
+            owner_id = request.user.id
+        )
+
+    return render(request, "create_offer.html", {
+        "name": "Create", 
+        "form": CreateNewProduct
+    })

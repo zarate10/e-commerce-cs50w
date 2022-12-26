@@ -7,9 +7,7 @@ class Categories(models.Model):
     def __str__(self):
         return self.title
 
-CATEGORIES_PRODUCTS = [
-    ('Other', 'Other'),
-]
+CATEGORIES_PRODUCTS = []
 
 dynamic_categories = Categories.objects.values()
 
@@ -47,5 +45,3 @@ class WatchList(models.Model):
     user = models.CharField(max_length=150)
     product = models.PositiveIntegerField()
 
-    
-# model for store the winners 

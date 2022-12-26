@@ -12,5 +12,7 @@ urlpatterns = [
     path('product/<str:name>/inactive', views.desactivar_producto, name="desactivar_producto"),
     path('watchlist', views.view_watchlist, name="view_watchlist"),
     path('inactive', views.inactive_products, name="inactive_products"), 
-    path('categories', views.view_categories, name="view_categories")
+    path('categories', views.view_categories, name="view_categories"), 
+    path('categories/<str:name>', views.filter_category, name="filter_category"), 
+    path('create', views.view_create_offer, name="view_create_offer"),       
 ]

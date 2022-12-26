@@ -15,3 +15,4 @@ class CreateNewProduct(ModelForm):
     class Meta: 
         model = Products
         fields = ["title", "description", "initial_offer", "img_url", "category"]
+    

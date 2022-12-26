@@ -1,11 +1,18 @@
 {% extends 'layout/base.html' %}
 {% block body %}
     <div class="box-inactive" style="width: 100%; text-align: center; height: 60px;" >
-        <a href="{% url 'inactive_products' %}">Inactive</a>
+        <a href="{% url 'inactive_products' %}" style="color: black;">Inactive</a>
     </div>
     <div class="wrapper-catalog">
+        {% if not products %}
+        <h3 style="
+        width: 100%;
+        height: 55vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;">No items to display</h3>
+        {% else %}
         {% for item in products %}
-
             <a href="/product/{{item.title}}" class="box-product">
                 <div class="img-box">
                     <img src="{{ item.img_url }}" alt="">
@@ -27,6 +34,6 @@
             </a>
 
         {% endfor %}
-
+        {% endif %}
     </div>
 {% endblock %}

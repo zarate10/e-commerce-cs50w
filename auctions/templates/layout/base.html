@@ -28,7 +28,7 @@
                 <li><a href="{% url 'index' %}">Products</a></li>
                 <li><a href="{% url 'view_categories' %}">Categories</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="">Create</a></li>
+                    <li><a href="{% url 'view_create_offer' %}">Create</a></li>
                     <li><a href="{% url 'view_watchlist' %}">Watchlist</a></li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
