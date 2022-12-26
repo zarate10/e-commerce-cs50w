@@ -39,21 +39,32 @@
                     {% if user.is_authenticated %}
                         {% if user != item.owner %}
                         <div class="bid">
-                            <form action="/product/{{ name }}" method="POST">
-                                {% csrf_token %}
-                                {% if item.last_offer != None %}
-                                    <input name="last_offer" type="number" min="{{ item.last_offer }}" max="99999999999" placeholder="$" required>
+                                {% if item.available %}
+                                <form action="/product/{{ name }}" method="POST">
+                                    {% csrf_token %}
+                                    {% if item.last_offer != None %}
+                                        <input name="last_offer" type="number" min="{{ item.last_offer }}" max="99999999999" placeholder="$" required>
+                                    {% else %}
+                                        <input name="last_offer" type="number" min="{{ item.initial_offer }}" max="99999999999">
+                                    {% endif %}
+                                    <input name="last_bidder" type="text" value="{{ user }}" hidden>
+                                    <button type="submit">PLACE BID</button>
+                                </form>
                                 {% else %}
-                                    <input name="last_offer" type="number" min="{{ item.initial_offer }}" max="99999999999">
+                                    {% if ultimo_postor %}
+                                        <br>
+                                        <h2>You won the auction</h2>
+                                    {% endif %}
                                 {% endif %}
-                                <input name="last_bidder" type="text" value="{{ user }}" hidden>
-                                <button type="submit">PLACE BID</button>
-                            </form>
-                        </div>
+                            </div>
                         {% else %}
                         <div class="bid">
-                            <form action="/" method="POST">
+                            <form action="/product/{{ name }}/inactive" method="POST">
+                                {% csrf_token %}
+                                <input type="text" name="item_id" value="{{ item.id }}" hidden>
+                                {% if item.available %}
                                 <button type="submit">CLOSE AUCTION</button>
+                                {% endif %}
                             </form>
                         </div>
                         {% endif %}
@@ -73,8 +84,13 @@
                     <div class="header-comment" id="comments">
                         <form action="/product/{{ name }}/" method="POST">
                             {% csrf_token %}
-                            <input type="text" name="comment" placeholder="Add comment">
-                            <button type="submit">ADD</button>
+                            {% if not active %}
+                                <input type="text" name="comment" placeholder="Add comment" disabled>
+                                <button type="submit" disabled>ADD</button>
+                            {% else %}
+                                <input type="text" name="comment" placeholder="Add comment">
+                                <button type="submit">ADD</button>
+                            {% endif %}
                         </form>
                     </div>
                 {% endif %}

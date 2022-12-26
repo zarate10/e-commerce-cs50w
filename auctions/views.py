@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 
 from .forms import UserCreationForm
-from .models import Products, Comments, WatchList
+from .models import Products, Comments, WatchList, Categories
 
 # Create your views here.
 
@@ -13,7 +13,6 @@ def index(request):
     
     name_view = 'Home'
     products = Products.objects.filter(available=True)
-
 
     return render(request, "index.html", {
         "name": name_view, 
@@ -94,6 +93,13 @@ def product_view(request, name):
     comments = list(Comments.objects.filter(product=product_obj['id']).values())
     user_watchlist = list(WatchList.objects.filter(user=request.user.id, product=list(product.values())[0]['id']).values())
 
+    contexto = {
+        "name": name_view, 
+        "watchlist": user_watchlist, 
+        "product": product, 
+        "active": product.values()[0]['available'],
+    }
+
     if request.method == 'POST':
         oferta_inicial = int(product_obj['initial_offer']) 
         ultima_oferta = int(request.POST['last_offer']) 
@@ -101,12 +107,9 @@ def product_view(request, name):
         if product_obj['last_offer'] != None: # acá hay última oferta
 
             if int(product_obj['last_offer']) > ultima_oferta - 1: 
-                return render(request, 'product_view.html', {
-                    "name": name_view,
-                    "watchlist": user_watchlist, 
-                    "product": product, 
-                    "message": "Bid must be higher than the last bid."
-                }) 
+
+                contexto['message'] = "Bid must be higher than the last bid."
+                return render(request, 'product_view.html', contexto) 
             
             product.update(last_offer=request.POST['last_offer'], last_bidder=request.POST['last_bidder'])
             return redirect(f'/product/{name}')
@@ -114,30 +117,22 @@ def product_view(request, name):
         else: # acá no hay última oferta
   
             if oferta_inicial > ultima_oferta - 1: 
-                return render(request, 'product_view.html', {
-                    "name": name_view,
-                    "watchlist": user_watchlist, 
-                    "product": product, 
-                    "message": "The offer must be higher than the initial offer."
-                }) 
-            
+                contexto['message'] = "The offer must be higher than the initial offer."
+                return render(request, 'product_view.html', contexto) 
+        
             product.update(last_offer=request.POST['last_offer'], last_bidder=request.POST['last_bidder'])
             return redirect(f'/product/{name}')
 
     if comments: 
+        contexto['comments'] = comments
 
-        return render(request, 'product_view.html', {
-            "name": name_view,
-            "watchlist": user_watchlist, 
-            "product": product, 
-            "comments": comments, 
-        }) 
-    
-    return render(request, 'product_view.html', {
-        "name": name_view,
-        "watchlist": user_watchlist, 
-        "product": product, 
-    }) 
+    if not contexto['active'] and request.user != 'AnonymousUser': 
+        try: 
+            contexto['ultimo_postor'] = list(User.objects.filter(id=request.user.id).values())[0]['username'] == product.values()[0]['last_bidder']
+        except Exception as e:
+            print(e)
+
+    return render(request, 'product_view.html', contexto) 
     
 
 
@@ -179,3 +174,44 @@ def add_watchlist(request, name):
             data_in_database.delete()
 
     return redirect(f'/product/{name}')
+
+def view_watchlist(request): 
+    user_watchlist = [element[2] for element in list(WatchList.objects.filter(user=request.user.id).values_list())]
+    products = [Products.objects.get(id=element) for element in user_watchlist]
+
+    return render(request, 'watchlist.html', { 
+        "products": products
+    })
+
+def inactive_products(request): 
+    products = Products.objects.filter(available=False)
+
+    contexto = {
+        "products": products, 
+    }
+
+    try: 
+        contexto['ultimo_postor'] = list(User.objects.filter(id=request.user.id).values())[0]['username'] == products.values()[0]['last_bidder']
+    except Exception as e:
+        print(e)
+
+    return render(request, 'inactive.html', contexto)
+
+def desactivar_producto(request, name): 
+    
+    if request.method == 'POST':
+        product = Products.objects.filter(id=request.POST['item_id'])
+        product.update(available=False)
+
+    return redirect('/')
+
+def view_categories(request): 
+
+    categories = [element[1] for element in list(Categories.objects.all().values_list())]
+
+    contexto = {
+        "name": 'Categories', 
+        "tipos": categories
+    }
+
+    return render(request, 'categories.html', contexto)

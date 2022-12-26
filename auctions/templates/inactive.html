@@ -1,12 +1,17 @@
 {% extends 'layout/base.html' %}
 {% block body %}
+
     <div class="box-inactive" style="width: 100%; text-align: center; height: 60px;" >
-        <a href="{% url 'inactive_products' %}">Inactive</a>
+        <a href="{% url 'index' %}">Active</a>
     </div>
     <div class="wrapper-catalog">
         {% for item in products %}
-
-            <a href="/product/{{item.title}}" class="box-product">
+        <a href="/product/{{item.title}}" class="box-product">
+                {% if ultimo_postor %}
+                <div class="box-notify" style="width: 100%; position: relative;">
+                    <div class="circle" style="position: absolute; padding: 5px 15px; background: rgb(0, 0, 0); right: -15px; top: -15px; border-radius: 10px; font-size: 0.9em; color: white;">won</div>
+                </div>
+                {% endif %}
                 <div class="img-box">
                     <img src="{{ item.img_url }}" alt="">
                 </div>   
@@ -28,5 +33,4 @@
 
         {% endfor %}
 
-    </div>
 {% endblock %}

@@ -1,3 +1,29 @@
 {% extends 'layout/base.html' %}
 {% block body %}
+    <div class="wrapper-catalog">
+        {% for item in products %}
+
+            <a href="/product/{{item.title}}" class="box-product">
+                <div class="img-box">
+                    <img src="{{ item.img_url }}" alt="">
+                </div>   
+                <div class="data-box">
+                    <div class="title">
+                        <p>{{ item.title }}</p>
+                        {% if not item.last_offer %}
+                            <p style="max-width: 9ch; font-size: 0.9em;">${{ item.initial_offer }}</p>
+                        {% else %}
+                            <p style="max-width: 9ch; font-size: 0.9em;">${{ item.last_offer }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="description">
+                        <p>Created by {{ item.owner }}</p>
+                        {{item.created_at}}
+                    </div>
+                </div>
+            </a>
+
+        {% endfor %}
+
+    </div>
 {% endblock %}
