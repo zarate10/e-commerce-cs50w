@@ -18,7 +18,22 @@ Especificaciones:
 - Categories: Users should be able to visit a page that displays a list of all listing categories. Clicking on the name of any category should take the user to a page that displays all of the active listings in that category.
 - Django Admin Interface: Via the Django admin interface, a site administrator should be able to view, add, edit, and delete any listings, comments, and bids made on the site.
 
-Run: 
-1. Tener instalado Django
-2. Crear un virtual environment
-3. Correr manage.py
+## Para correr el proyecto
+```
+Clonar repositorio. 
+```
+```
+py -m pip install virtualenv
+```
+```
+py -m virtualenv venv
+```
+```
+Activar entorno virtual (./venv/scripts/activate)
+```
+```
+py -m pip install -r requirements.txt 
+```
+```
+py manage.py runserver 
+```
